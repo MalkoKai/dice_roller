@@ -1,4 +1,3 @@
-import 'package:dice_roller/widgets/custom_text.dart';
 import 'package:dice_roller/widgets/dice_roller.dart';
 import 'package:dice_roller/widgets/edit_container.dart';
 import 'package:dice_roller/widgets/quantity_input.dart';
@@ -143,7 +142,10 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               backgroundColor: Colors.white,
               foregroundColor: Colors.black,
             ),
-            child: CustomText('Roll'),
+            child: Text(
+              'Roll',
+              style: TextStyle(color: Colors.black, fontSize: 30),
+            ),
           ),
           SizedBox(height: 150),
         ],

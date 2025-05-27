@@ -51,6 +51,16 @@ class _QuantityInputState extends State<QuantityInput> {
                 widget.onChanged();
               });
             },
+            onLongPress: () {
+              setState(() {
+                if (widget.type == 'bonus') {
+                  _dice.setBonusDice(-100);
+                }
+                if (widget.type == 'multiplier') {
+                  _dice.setMultiplier(1);
+                }
+              });
+            },
             child: Icon(Icons.remove, size: 25, color: Colors.white),
           ),
           SizedBox(
@@ -74,6 +84,16 @@ class _QuantityInputState extends State<QuantityInput> {
                   _dice.plusMultiplier();
                 }
                 widget.onChanged();
+              });
+            },
+            onLongPress: () {
+              setState(() {
+                if (widget.type == 'multiplier') {
+                  _dice.setMultiplier(10);
+                }
+                if (widget.type == 'bonus') {
+                  _dice.setBonusDice(100);
+                }
               });
             },
             child: Icon(Icons.add, size: 25, color: Colors.white),

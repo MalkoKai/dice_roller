@@ -66,6 +66,10 @@ class Dice {
     _multiplier = 1;
   }
 
+  void setBonusDice(int value) {
+    _bonusDice = value;
+  }
+
   void setMultiplier(int value) {
     _multiplier = value;
   }
@@ -82,7 +86,7 @@ class Dice {
   }
 
   void plusMultiplier() {
-    if (_multiplier < 99) {
+    if (_multiplier < 10) {
       _multiplier++;
     }
   }
