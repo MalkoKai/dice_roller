@@ -20,7 +20,6 @@ class SetValuesContainer extends StatefulWidget {
 
 class _SetValuesContainerState extends State<SetValuesContainer> {
   late final Dice _dice;
-  bool _showDiceView = true; // true for dice view, false for theme view
   int _selectedDiceIndex = 2; // Track selected dice size
   var temp = 2.0;
 

@@ -1,4 +1,3 @@
-import 'package:dice_roller/widgets/edit_container.dart';
 import 'package:dice_roller/widgets/set_values_container.dart';
 import 'package:dice_roller/widgets/summary_container.dart';
 import 'package:flutter/material.dart';

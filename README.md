@@ -1,16 +1,40 @@
-# dice_roller
+# 🎲 Dice Roller App
 
-A new Flutter project.
+A sleek and dynamic Flutter application that brings the thrill of dice rolling to your device! Perfect for board games, tabletop RPGs, or any situation where you need random numbers with style.
 
-## Getting Started
+## ✨ Features
 
-This project is a starting point for a Flutter application.
+### 🎯 Core Functionality
+- **Multi-Dice Rolling**: Roll up to 10 dice simultaneously
+- **Diverse Dice Types**: Support for all standard dice (d4, d6, d8, d10, d12, d20) and coin (d2)
+- **Bonus and Malus**: Add bonus or malus to your dice result to better immerse yourself in your D&D game
+- **Custom Dice**: Use a custom dice with the number of sides you prefer (up to 100)
+- **Sum Calculation**: Automatic total calculation of all rolled dice
+- **Roll History**: Track your previous rolls with timestamps
 
-A few resources to get you started if this is your first Flutter project:
+### 🛠 Technical Features
+- **Offline Support**: Works without internet connection
+- **Low Battery Usage**: Optimized performance
+- **Small App Size**: Minimal storage footprint
+- **Fast Launch Time**: Instant app availability
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 📱 Screenshots
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div align="center">
+    <img src="assets/screenshots/screenshot1.png" width="200" alt="Main Screen">
+    <img src="assets/screenshots/screenshot2.png" width="200" alt="Dice Roll (d6)">
+    <img src="assets/screenshots/screenshot3.png" width="200" alt="Dice Roll (d12)">
+    <img src="assets/screenshots/screenshot4.png" width="200" alt="Roll History">
+</div>
+
+
+## 💡 Usage
+
+1. Select your desired dice type from the menu
+2. Choose the number of dice (1-10)
+3. Add a modifier to your dice roll 
+4. Tap the roll button
+5. View results and history
+
+---
+Made with ❤️ using Flutter
