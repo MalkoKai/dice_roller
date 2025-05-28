@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   sliding_up_panel: ^2.0.0+1
   input_quantity: ^2.5.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -51,11 +52,11 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 
-flutter_icons:
-  android: true
+flutter_launcher_icons:
+  android: "flutter_launcher_icons"
   ios: true
   image_path: "assets/icon/app_icon.png"
-  adaptive_icon_background: "#FFFFFF"
+  min_sdk_android: 21
 
 
 # The following section is specific to Flutter packages.
