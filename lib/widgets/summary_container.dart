@@ -33,11 +33,11 @@ class _SummaryContainerState extends State<SummaryContainer> {
                 children: [
                   Text(
                     'D${widget.dice.currentDiceSize}',
-                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   Text(
                     'Dice',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
                 ],
               ),
@@ -48,11 +48,11 @@ class _SummaryContainerState extends State<SummaryContainer> {
                 children: [
                   Text(
                     'x${widget.dice.multiplier}',
-                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   Text(
                     'Multiplier',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
                 ],
               ),
@@ -63,11 +63,11 @@ class _SummaryContainerState extends State<SummaryContainer> {
                 children: [
                   Text(
                     '${widget.dice.bonusDice}',
-                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
                   Text(
                     'Modifier',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
                 ],
               ),

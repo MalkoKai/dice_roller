@@ -1,6 +1,4 @@
-import 'package:dice_roller/widgets/dice_roller.dart';
 import 'package:dice_roller/widgets/edit_container.dart';
-import 'package:dice_roller/widgets/quantity_input.dart';
 import 'package:dice_roller/widgets/set_values_container.dart';
 import 'package:dice_roller/widgets/summary_container.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +34,6 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 70),
-          EditContainer(
-            dice: _dice,
-            onDiceChanged: () {
-              setState(() {});
-            },
-          ),
           Spacer(),
           SummaryContainer(
             dice: _dice,
