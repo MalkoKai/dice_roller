@@ -1,6 +1,8 @@
 import 'package:dice_roller/widgets/dice_roller.dart';
 import 'package:dice_roller/widgets/edit_container.dart';
 import 'package:dice_roller/widgets/quantity_input.dart';
+import 'package:dice_roller/widgets/set_values_container.dart';
+import 'package:dice_roller/widgets/summary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dice_roller/models/dice.dart';
@@ -41,111 +43,19 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               setState(() {});
             },
           ),
-          SizedBox(height: 50),
-          DiceRoller(dice: _dice),
           Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${_dice.getRollExpression()} =',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w100,
-                ),
-              ),
-              SizedBox(width: 20),
-              Text(
-                _dice.getTotalRoll().toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 50),
-          Row(
-            children: [
-              SizedBox(width: 30),
-              Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'N. of Dices',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  QuantityInput(
-                    dice: _dice,
-                    onChanged: () {
-                      setState(() {});
-                    },
-                    type: 'multiplier',
-                  ),
-                ],
-              ),
-              Spacer(),
-              Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('', style: TextStyle(color: Colors.white)),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _dice.reset();
-                      });
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                    ),
-                    icon: Icon(Icons.restart_alt),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Modifier',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  QuantityInput(
-                    dice: _dice,
-                    onChanged: () {
-                      setState(() {});
-                    },
-                    type: 'bonus',
-                  ),
-                ],
-              ),
-              SizedBox(width: 30),
-            ],
-          ),
-          SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _dice.rollDice();
-              });
+          SummaryContainer(
+            dice: _dice,
+            onDiceChanged: () {
+              setState(() {});
             },
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-            ),
-            child: Text(
-              'Roll',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
+          ),
+          Spacer(),
+          SetValuesContainer(
+            dice: _dice,
+            onDiceChanged: () {
+              setState(() {});
+            },
           ),
           SizedBox(height: 150),
         ],

@@ -26,8 +26,7 @@ class Dice {
     for (int i = 0; i < _multiplier; i++) {
       _currentDiceNums.add(_randomizer.nextInt(_currentDiceSize) + 1);
     }
-
-    _currentDiceNums.sort();
+    _currentDiceNums.sort((a, b) => b.compareTo(a));
 
     Map<String, List<List<int>>> newRoll = {
       (_diceRolls.length + 1).toString(): [

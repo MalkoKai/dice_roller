@@ -1,5 +1,6 @@
 import 'package:dice_roller/models/dice.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EditContainer extends StatefulWidget {
   const EditContainer({
@@ -60,6 +61,7 @@ class _EditContainerState extends State<EditContainer> {
                     _dice.setCustomDiceSize(temp.toInt());
                     widget.onDiceChanged();
                   });
+                  HapticFeedback.lightImpact();
                   Navigator.pop(context);
                 },
                 child: Text('Confirm'),
@@ -117,6 +119,7 @@ class _EditContainerState extends State<EditContainer> {
                           widget.onDiceChanged();
                         }
                       });
+                      HapticFeedback.lightImpact();
                     },
                     child: Image.asset(diceIcons[index], width: 30, height: 30),
                   ),
@@ -146,7 +149,7 @@ class _EditContainerState extends State<EditContainer> {
       //height: MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         children: [
@@ -167,6 +170,7 @@ class _EditContainerState extends State<EditContainer> {
                   setState(() {
                     _showDiceView = true;
                   });
+                  HapticFeedback.lightImpact();
                 },
                 child: Text(
                   'Dice',
@@ -191,6 +195,7 @@ class _EditContainerState extends State<EditContainer> {
                   setState(() {
                     _showDiceView = false;
                   });
+                  HapticFeedback.lightImpact();
                 },
                 child: Text(
                   'Theme',

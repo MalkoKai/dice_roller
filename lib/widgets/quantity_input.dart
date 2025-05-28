@@ -1,5 +1,6 @@
 import 'package:dice_roller/models/dice.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class QuantityInput extends StatefulWidget {
   const QuantityInput({
@@ -18,23 +19,18 @@ class QuantityInput extends StatefulWidget {
 }
 
 class _QuantityInputState extends State<QuantityInput> {
-  late final Dice _dice;
-
-  @override
-  void initState() {
-    super.initState();
-    _dice = widget.dice;
-  }
+  //late final Dice _dice;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       //width: 150,
-      height: 40,
+      height: 60,
       //padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.white),
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.black),
       ),
       child: Row(
         children: [
@@ -42,11 +38,13 @@ class _QuantityInputState extends State<QuantityInput> {
           InkWell(
             onTap: () {
               setState(() {
-                if (widget.type == 'bonus') {
-                  _dice.minusDice();
+                if (widget.type == 'bonus' && widget.dice.bonusDice > -100) {
+                  HapticFeedback.lightImpact();
+                  widget.dice.minusDice();
                 }
-                if (widget.type == 'multiplier') {
-                  _dice.minusMultiplier();
+                if (widget.type == 'multiplier' && widget.dice.multiplier > 1) {
+                  HapticFeedback.lightImpact();
+                  widget.dice.minusMultiplier();
                 }
                 widget.onChanged();
               });
@@ -54,34 +52,44 @@ class _QuantityInputState extends State<QuantityInput> {
             onLongPress: () {
               setState(() {
                 if (widget.type == 'bonus') {
-                  _dice.setBonusDice(-100);
+                  HapticFeedback.lightImpact();
+                  widget.dice.setBonusDice(-100);
                 }
                 if (widget.type == 'multiplier') {
-                  _dice.setMultiplier(1);
+                  HapticFeedback.lightImpact();
+                  widget.dice.setMultiplier(1);
                 }
+                widget.onChanged();
               });
             },
-            child: Icon(Icons.remove, size: 25, color: Colors.white),
+            child: Icon(Icons.remove_rounded, size: 35, color: Colors.black),
           ),
           SizedBox(
-            width: 60,
+            width: 100,
             child: Center(
               child: Text(
                 widget.type == 'bonus'
-                    ? _dice.bonusDice.toString()
-                    : 'x${_dice.multiplier.toString()}',
-                style: TextStyle(fontSize: 25, color: Colors.white),
+                    ? widget.dice.bonusDice.toString()
+                    : 'x${widget.dice.multiplier.toString()}',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
           InkWell(
             onTap: () {
               setState(() {
-                if (widget.type == 'bonus') {
-                  _dice.plusDice();
+                if (widget.type == 'bonus' && widget.dice.bonusDice < 100) {
+                  HapticFeedback.lightImpact();
+                  widget.dice.plusDice();
                 }
-                if (widget.type == 'multiplier') {
-                  _dice.plusMultiplier();
+                if (widget.type == 'multiplier' &&
+                    widget.dice.multiplier < 10) {
+                  HapticFeedback.lightImpact();
+                  widget.dice.plusMultiplier();
                 }
                 widget.onChanged();
               });
@@ -89,14 +97,17 @@ class _QuantityInputState extends State<QuantityInput> {
             onLongPress: () {
               setState(() {
                 if (widget.type == 'multiplier') {
-                  _dice.setMultiplier(10);
+                  HapticFeedback.lightImpact();
+                  widget.dice.setMultiplier(10);
                 }
                 if (widget.type == 'bonus') {
-                  _dice.setBonusDice(100);
+                  HapticFeedback.lightImpact();
+                  widget.dice.setBonusDice(100);
                 }
+                widget.onChanged();
               });
             },
-            child: Icon(Icons.add, size: 25, color: Colors.white),
+            child: Icon(Icons.add_rounded, size: 35, color: Colors.black),
           ),
           SizedBox(width: 10),
         ],

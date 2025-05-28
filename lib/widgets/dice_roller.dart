@@ -23,7 +23,7 @@ class _DiceRollerState extends State<DiceRoller> {
   Widget build(BuildContext context) {
     return Image.asset(
       [20, 12, 10, 8, 6, 4, 2].contains(_dice.currentDiceSize)
-          ? 'assets/images/dice_images/dice-d${_dice.currentDiceSize}-${_dice.currentDiceNums.isNotEmpty ? _dice.currentDiceNums.last : 1}.png'
+          ? 'assets/images/dice_images/dice-d${_dice.currentDiceSize}-${_dice.currentDiceNums.isNotEmpty ? _dice.currentDiceNums.first : 1}.png'
           : 'assets/images/dice_icons/icon-d100.png',
       height: MediaQuery.of(context).size.height * 0.15,
     );
