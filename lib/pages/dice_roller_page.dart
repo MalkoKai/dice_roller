@@ -1,6 +1,9 @@
+import 'package:dice_roller/widgets/dice_roll_dialog.dart';
 import 'package:dice_roller/widgets/set_values_container.dart';
 import 'package:dice_roller/widgets/summary_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shake/shake.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dice_roller/models/dice.dart';
 
@@ -16,10 +19,61 @@ class DiceRollerPage extends StatefulWidget {
 class _DiceRollerPageState extends State<DiceRollerPage> {
   Dice _dice = Dice();
 
+  ShakeDetector? _detector;
+  String _lastShakeInfo = 'No shake detected yet';
+  final double _shakeThreshold = 2.7;
+  final bool _useFilter = false;
+  final int _minimumShakeCount = 2;
+
   @override
   void initState() {
     super.initState();
     _dice = Dice();
+
+    _startDetector();
+  }
+
+  @override
+  void dispose() {
+    _detector?.stopListening();
+    super.dispose();
+  }
+
+  void _startDetector() {
+    // Stop previous detector if exists
+    _detector?.stopListening();
+    _detector = ShakeDetector.autoStart(
+      onPhoneShake: (ShakeEvent event) async {
+        setState(() {
+          // Stop detecting shakes
+          _detector?.stopListening();
+
+          _dice.rollDice();
+          HapticFeedback.heavyImpact();
+
+          _lastShakeInfo =
+              'Shake detected:\n'
+              'Direction: ${event.direction}\n'
+              'Force: ${event.force.toStringAsFixed(2)}\n'
+              'Time: ${event.timestamp.toString()}';
+        });
+        await showDialog(
+          context: context,
+          barrierDismissible: false, // Prevent closing by tapping outside
+          builder: (context) {
+            return DiceRollDialog(dice: _dice);
+          },
+        );
+
+        // Restart shake detection after dialog is closed
+        _startDetector();
+      },
+      minimumShakeCount: _minimumShakeCount,
+      shakeSlopTimeMS: 500,
+      shakeCountResetTime: 3000,
+      shakeThresholdGravity: _shakeThreshold,
+      useFilter: _useFilter,
+    );
   }
 
   @override
@@ -27,6 +81,13 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
     return SlidingUpPanel(
       maxHeight: MediaQuery.of(context).size.height * 0.8,
       parallaxEnabled: true,
+      backdropEnabled: true,
+      onPanelOpened: () {
+        _detector?.stopListening();
+      },
+      onPanelClosed: () {
+        _startDetector();
+      },
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(18),
         topRight: Radius.circular(18),
@@ -46,6 +107,8 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
             onDiceChanged: () {
               setState(() {});
             },
+            stopShakeDetection: () => _detector?.stopListening(),
+            startShakeDetection: _startDetector,
           ),
           SizedBox(height: 150),
         ],

@@ -1,5 +1,5 @@
 import 'package:dice_roller/models/dice.dart';
-import 'package:dice_roller/widgets/dice_roller.dart';
+import 'package:dice_roller/widgets/dice_roll_dialog.dart';
 import 'package:dice_roller/widgets/quantity_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,11 +8,15 @@ class SetValuesContainer extends StatefulWidget {
   const SetValuesContainer({
     required this.dice,
     required this.onDiceChanged,
+    required this.stopShakeDetection,
+    required this.startShakeDetection,
     super.key,
   });
 
   final Dice dice;
   final VoidCallback onDiceChanged;
+  final VoidCallback stopShakeDetection;
+  final VoidCallback startShakeDetection;
 
   @override
   State<SetValuesContainer> createState() => _SetValuesContainerState();
@@ -32,43 +36,7 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
   void customDice() {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('Custom Dice'),
-            content: Text('Enter the number of sides for your custom dice.'),
-            actions: [
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return Column(
-                    children: [
-                      Slider(
-                        value: temp,
-                        min: 2,
-                        max: 100,
-                        onChanged: (value) {
-                          setState(() {
-                            temp = value;
-                          });
-                        },
-                      ),
-                      Text('${temp.toInt()} sides'),
-                    ],
-                  );
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _dice.setCustomDiceSize(temp.toInt());
-                    widget.onDiceChanged();
-                  });
-                  HapticFeedback.lightImpact();
-                  Navigator.pop(context);
-                },
-                child: Text('Confirm'),
-              ),
-            ],
-          ),
+      builder: (context) => DiceRollDialog(dice: _dice),
     );
   }
 
@@ -223,77 +191,25 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.1,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                // Stop shake detection before showing dialog
+                widget.stopShakeDetection();
+
                 setState(() {
                   _dice.rollDice();
                   HapticFeedback.heavyImpact();
                   widget.onDiceChanged();
-                  showDialog(
-                    context: context,
-                    builder:
-                        (context) => AlertDialog(
-                          title: Text(
-                            'Rolled Dice',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.black,
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              DiceRoller(dice: _dice),
-                              SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${_dice.multiplier}d${_dice.currentDiceSize} + ${_dice.bonusDice} =',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w100,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Text(
-                                    _dice.getTotalRoll().toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                '[ ${_dice.currentDiceNums.join(', ')} ]',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
-                                ),
-                                child: Text(
-                                  'Ok',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                  );
                 });
+
+                // Show dialog and prevent dismissing by tapping outside
+                await showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => DiceRollDialog(dice: _dice),
+                );
+
+                // Restart shake detection after dialog is closed
+                widget.startShakeDetection();
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -302,12 +218,28 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-
               child: Text(
-                'Roll',
+                'ROLL',
                 style: TextStyle(color: Colors.black, fontSize: 30),
               ),
             ),
+          ),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              Spacer(),
+              Text(
+                'or SHAKE YOUR DEVICE TO ROLL',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              SizedBox(width: 10),
+              Icon(Icons.vibration_rounded, color: Colors.white, size: 20),
+              Spacer(),
+            ],
           ),
         ],
       ),

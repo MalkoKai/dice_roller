@@ -11,16 +11,11 @@ A sleek and dynamic Flutter application that brings the thrill of dice rolling t
 ### 🎯 Core Functionality
 - **Multi-Dice Rolling**: Roll up to 10 dice simultaneously
 - **Diverse Dice Types**: Support for all standard dice (d4, d6, d8, d10, d12, d20) and coin (d2)
+- **Shake to Roll**: Shake your device to roll the dice, as you have them in your hand
 - **Bonus and Malus**: Add bonus or malus to your dice result to better immerse yourself in your D&D game
 - **Custom Dice**: Use a custom dice with the number of sides you prefer (up to 100)
 - **Sum Calculation**: Automatic total calculation of all rolled dice
-- **Roll History**: Track your previous rolls with timestamps
-
-### 🛠 Technical Features
-- **Offline Support**: Works without internet connection
-- **Low Battery Usage**: Optimized performance
-- **Small App Size**: Minimal storage footprint
-- **Fast Launch Time**: Instant app availability
+- **Roll History**: Track your previous rolls
 
 ## 📱 Screenshots
 
@@ -37,7 +32,7 @@ A sleek and dynamic Flutter application that brings the thrill of dice rolling t
 1. Select your desired dice type from the menu
 2. Choose the number of dice (1-10)
 3. Add a modifier to your dice roll 
-4. Tap the roll button
+4. Tap the roll button (or Shake your device)
 5. View results and history
 
 ---

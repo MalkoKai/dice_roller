@@ -37,6 +37,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   input_quantity: ^2.5.1
   flutter_launcher_icons: ^0.14.3
+  shake: ^3.0.0
 
 dev_dependencies:
   flutter_test:
