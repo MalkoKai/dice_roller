@@ -2,7 +2,7 @@
     <img src="assets/icon/app_icon.png" width="200" style="background-color: white;">
 </div>
 
-# 🎲 Dice Roller
+# 🎲 RPG Dice Roller
 
 A sleek and dynamic Flutter application that brings the thrill of dice rolling to your device! Perfect for board games, tabletop RPGs, or any situation where you need random numbers with style.
 

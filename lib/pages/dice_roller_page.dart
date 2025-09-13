@@ -21,7 +21,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
 
   ShakeDetector? _detector;
   String _lastShakeInfo = 'No shake detected yet';
-  final double _shakeThreshold = 2.7;
+  final double _shakeThreshold = 1.5;
   final bool _useFilter = false;
   final int _minimumShakeCount = 2;
 

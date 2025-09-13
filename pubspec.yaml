@@ -1,5 +1,5 @@
 name: dice_roller
-description: "A new Flutter project."
+description: "A sleek and dynamic Flutter application that brings the thrill of dice rolling to your device! Perfect for board games, tabletop RPGs, or any situation where you need random numbers with style."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -48,6 +48,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  build_runner: ^2.4.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -169,5 +170,5 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
+  # For details regarding fonts from package dependencies,p
   # see https://flutter.dev/to/font-from-package

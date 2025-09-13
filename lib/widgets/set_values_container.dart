@@ -36,7 +36,43 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
   void customDice() {
     showDialog(
       context: context,
-      builder: (context) => DiceRollDialog(dice: _dice),
+      builder:
+          (context) => AlertDialog(
+            title: Text('Custom Dice'),
+            content: Text('Enter the number of sides for your custom dice.'),
+            actions: [
+              StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    children: [
+                      Slider(
+                        value: temp,
+                        min: 2,
+                        max: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            temp = value;
+                          });
+                        },
+                      ),
+                      Text('${temp.toInt()} sides'),
+                    ],
+                  );
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _dice.setCustomDiceSize(temp.toInt());
+                    widget.onDiceChanged();
+                  });
+                  HapticFeedback.lightImpact();
+                  Navigator.pop(context);
+                },
+                child: Text('Confirm'),
+              ),
+            ],
+          ),
     );
   }
 

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="dice_roller"
+        android:label="RPG Dice Roller"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
