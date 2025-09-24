@@ -28,9 +28,9 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
 
   ShakeDetector? _detector;
   String _lastShakeInfo = 'No shake detected yet';
-  final double _shakeThreshold = 1.5;
+  final double _shakeThreshold = 2;
   final bool _useFilter = false;
-  final int _minimumShakeCount = 2;
+  final int _minimumShakeCount = 1;
 
   final GlobalKey _two = GlobalKey();
 
@@ -79,7 +79,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       },
       minimumShakeCount: _minimumShakeCount,
       shakeSlopTimeMS: 500,
-      shakeCountResetTime: 3000,
+      shakeCountResetTime: 2000,
       shakeThresholdGravity: _shakeThreshold,
       useFilter: _useFilter,
     );
@@ -126,7 +126,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                   showAboutDialog(
                     context: context,
                     applicationName: 'Dice Roller',
-                    applicationVersion: '1.0.1',
+                    applicationVersion: '1.0.3',
                     applicationLegalese:
                         'Developed with love, passion and Italian hands by MalkoKai\n\n'
                         'Contact me at malkokaidev@gmail.com for feedbacks, suggestions or just to say hi!',
