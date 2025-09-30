@@ -254,29 +254,35 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: Text(
-                'ROLL',
-                style: TextStyle(color: Colors.black, fontSize: 30),
+              child: Column(
+                children: [ 
+                  Spacer(),
+                  Text(
+                    'ROLL',
+                    style: TextStyle(color: Colors.black, fontSize: 30),
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Text(
+                        'or SHAKE YOUR DEVICE TO ROLL',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      SizedBox(width: 7),
+                      Icon(Icons.vibration_rounded, color: Colors.black, size: 15),
+                      Spacer(),
+                    ],
+                  ),
+                  Spacer(),
+                ],
               ),
             ),
           ),
           SizedBox(height: 20),
-          Row(
-            children: [
-              Spacer(),
-              Text(
-                'or SHAKE YOUR DEVICE TO ROLL',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              SizedBox(width: 10),
-              Icon(Icons.vibration_rounded, color: Colors.white, size: 20),
-              Spacer(),
-            ],
-          ),
         ],
       ),
     );

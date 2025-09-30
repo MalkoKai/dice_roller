@@ -7,6 +7,7 @@ import 'package:shake/shake.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dice_roller/models/dice.dart';
+import 'package:dice_roller/pages/paywall_adapty.dart';
 
 /// Global key for the first showcase widget
 final GlobalKey _firstShowcaseWidget = GlobalKey();
@@ -91,6 +92,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       maxHeight: MediaQuery.of(context).size.height * 0.8,
       parallaxEnabled: true,
       backdropEnabled: true,
+      minHeight: MediaQuery.of(context).size.height * 0.15,
       onPanelOpened: () {
         _detector?.stopListening();
       },
@@ -113,8 +115,11 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                 tooltip: 'Guided Tour',
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => ShowCaseWidget.of(context).startShowCase(
-                        [_firstShowcaseWidget, _two, _lastShowcaseWidget]),
+                    (_) => ShowCaseWidget.of(context).startShowCase([
+                      _firstShowcaseWidget,
+                      _two,
+                      _lastShowcaseWidget,
+                    ]),
                   );
                 },
               ),
@@ -126,10 +131,11 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                   showAboutDialog(
                     context: context,
                     applicationName: 'Dice Roller',
-                    applicationVersion: '1.0.3',
+                    applicationVersion: '1.0.6',
                     applicationLegalese:
                         'Developed with love, passion and Italian hands by MalkoKai\n\n'
                         'Contact me at malkokaidev@gmail.com for feedbacks, suggestions or just to say hi!',
+                    children: [SizedBox(height: 20), PaywallAdapty()],
                   );
                 },
               ),
@@ -139,16 +145,15 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
           Spacer(),
           Showcase(
             key: _firstShowcaseWidget,
-            description: 'Here there is a summary of your current dice settings, with:\n - Dice size (D2, D4, ...)\n - Multiplier (how many dice to roll)\n - Modifier (a value to add or subtract to the final result).',
+            description:
+                'Here there is a summary of your current dice settings, with:\n - Dice size (D2, D4, ...)\n - Multiplier (how many dice to roll)\n - Modifier (a value to add or subtract to the final result).',
             onBarrierClick: () {
-              ShowCaseWidget.of(context)
-                  .hideFloatingActionWidgetForKeys([
+              ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
-                _lastShowcaseWidget
+                _lastShowcaseWidget,
               ]);
             },
-            tooltipActionConfig:
-                const TooltipActionConfig(
+            tooltipActionConfig: const TooltipActionConfig(
               alignment: MainAxisAlignment.end,
               position: TooltipActionPosition.outside,
               gapBetweenContentAndAction: 10,
@@ -156,9 +161,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
             tooltipActions: [
               TooltipActionButton(
                 type: TooltipDefaultActionType.next,
-                textStyle: const TextStyle(
-                  color: Colors.white,
-                ),
+                textStyle: const TextStyle(color: Colors.white),
               ),
             ],
             child: SummaryContainer(
@@ -166,21 +169,20 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               onDiceChanged: () {
                 setState(() {});
               },
-            ),  
-          ),        
+            ),
+          ),
           Spacer(),
           Showcase(
             key: _two,
-            description: 'In order, here you can set the Dice size (tapping the dice icons), the Multiplier, the Modifier or reset all values to default.\nHold the + and - buttons to set the maximum and minimum values.\nRoll the dice by shaking your device or by tapping the "Roll" button.',
+            description:
+                'In order, here you can set the Dice size (swipe to see all the dice icons), the Multiplier, the Modifier or reset all values to default. Hold the + and - buttons to set the maximum and minimum values. Roll the dice by shaking your device or by tapping the "Roll" button.',
             onBarrierClick: () {
-              ShowCaseWidget.of(context)
-                  .hideFloatingActionWidgetForKeys([
+              ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
-                _lastShowcaseWidget
+                _lastShowcaseWidget,
               ]);
             },
-            tooltipActionConfig:
-                const TooltipActionConfig(
+            tooltipActionConfig: const TooltipActionConfig(
               alignment: MainAxisAlignment.start,
               position: TooltipActionPosition.outside,
               gapBetweenContentAndAction: 10,
@@ -194,64 +196,75 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               stopShakeDetection: () => _detector?.stopListening(),
               startShakeDetection: _startDetector,
             ),
-          ), 
-          SizedBox(height: 150),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.2),
         ],
       ),
       panel: Showcase(
-            key: _lastShowcaseWidget,
-            description: 'Swipe up this panel to see the history of your dice rolls.',
-            onBarrierClick: () {
-              ShowCaseWidget.of(context)
-                  .hideFloatingActionWidgetForKeys([
-                _firstShowcaseWidget,
-                _lastShowcaseWidget
-              ]);
-            },
-            tooltipActionConfig:
-                const TooltipActionConfig(
-              alignment: MainAxisAlignment.start,
-              position: TooltipActionPosition.outside,
-              gapBetweenContentAndAction: 10,
+        key: _lastShowcaseWidget,
+        description:
+            'Swipe up this panel to see the history of your dice rolls.',
+        onBarrierClick: () {
+          ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
+            _firstShowcaseWidget,
+            _lastShowcaseWidget,
+          ]);
+        },
+        tooltipActionConfig: const TooltipActionConfig(
+          alignment: MainAxisAlignment.start,
+          position: TooltipActionPosition.outside,
+          gapBetweenContentAndAction: 10,
+        ),
+        tooltipPosition: TooltipPosition.top,
+        child: Column(
+          children: [
+            //SizedBox(height: 5),
+            Icon(Icons.horizontal_rule, size: 40),
+            Text(
+              'Dice Rolls',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+              ),
             ),
-            tooltipPosition: TooltipPosition.top,
-            child: Column(
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5),
-                Icon(Icons.horizontal_rule, size: 40),
+                Text('Total Rolls: ${_dice.diceRolls.length}    |    '),
                 Text(
-                  'Dice Rolls',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _dice.diceRolls.length,
-                    itemBuilder: (context, index) {
-                      final entry = _dice.diceRolls.entries.elementAt(index);
-                      return Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              title: Text(
-                                'N.${entry.key}: ${entry.value[0][0]}d${entry.value[0][1]} + ${entry.value[0][2]} = ${(entry.value[1].reduce((a, b) => a + b) + entry.value[0][2])}',
-                              ),
-                              subtitle: Text('Values: ${entry.value[1].join(', ')}'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                  'Last Roll: ${_dice.diceRolls.isNotEmpty ? _dice.diceRolls.entries.last.value[1].reduce((a, b) => a + b) + _dice.diceRolls.entries.last.value[0][2] : 'N/A'}',
                 ),
               ],
             ),
-          ), 
+            Expanded(
+              child: ListView.builder(
+                itemCount: _dice.diceRolls.length,
+                itemBuilder: (context, index) {
+                  final entry = _dice.diceRolls.entries.elementAt(index);
+                  return Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text(
+                            'N.${entry.key}: ${entry.value[0][0]}d${entry.value[0][1]} + ${entry.value[0][2]} = ${(entry.value[1].reduce((a, b) => a + b) + entry.value[0][2])}',
+                          ),
+                          subtitle: Text(
+                            'Values: ${entry.value[1].join(', ')}',
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

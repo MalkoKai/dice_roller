@@ -1,6 +1,6 @@
+import 'package:dice_roller/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dice_roller/widgets/gradient_container.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -9,7 +9,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {  
+class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
@@ -21,14 +21,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: GradientContainer('It\'s time to roll!', [
-          Colors.blueGrey,
-          Colors.black,
-        ]),
-      ),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }

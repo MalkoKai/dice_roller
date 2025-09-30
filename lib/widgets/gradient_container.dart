@@ -19,36 +19,35 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: colors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      ),
-      child: ShowCaseWidget(
+        child: ShowCaseWidget(
           hideFloatingActionWidgetForShowcase: [_lastShowcaseWidget],
-          globalFloatingActionWidget: (showcaseContext) => FloatingActionWidget(
-            left: 16,
-            bottom: 16,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: ShowCaseWidget.of(showcaseContext).dismiss,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color( 0xFF444444)
-                ),
-                child: const Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
+          globalFloatingActionWidget:
+              (showcaseContext) => FloatingActionWidget(
+                left: 16,
+                bottom: 16,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: ShowCaseWidget.of(showcaseContext).dismiss,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF444444),
+                    ),
+                    child: const Text(
+                      'Skip',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
           onStart: (index, key) {
             log('onStart: $index, $key');
           },
@@ -76,22 +75,19 @@ class GradientContainer extends StatelessWidget {
             // so we hide this action for the first showcase widget
             TooltipActionButton(
               type: TooltipDefaultActionType.previous,
-              textStyle: const TextStyle(
-                color: Colors.white,
-              ),
+              textStyle: const TextStyle(color: Colors.white),
               hideActionWidgetForShowcase: [_firstShowcaseWidget],
             ),
             // Here we don't need next action for the last showcase widget so we
             // hide this action for the last showcase widget
             TooltipActionButton(
               type: TooltipDefaultActionType.next,
-              textStyle: const TextStyle(
-                color: Colors.white,
-              ),
+              textStyle: const TextStyle(color: Colors.white),
               hideActionWidgetForShowcase: [_lastShowcaseWidget],
             ),
           ],
         ),
+      ),
     );
   }
 }

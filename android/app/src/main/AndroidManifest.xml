@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="com.android.vending.BILLING" />
     <application
         android:label="RPG Dice Roller"
         android:name="${applicationName}"
@@ -30,6 +31,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="AdaptyPublicSdkKey"
+            android:value="public_live_JMJ7LnV7.k4xOEIDk7ogzSWEdnt5w" />
+        <meta-data
+            android:name="AdaptyObserverMode"
+            android:value="false" />
+        <meta-data
+            android:name="AdaptyGoogleAdvertisingIdCollectionDisabled"
+            android:value="true" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
