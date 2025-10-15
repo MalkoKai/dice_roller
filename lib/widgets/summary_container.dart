@@ -15,6 +15,13 @@ class SummaryContainer extends StatefulWidget {
 }
 
 class _SummaryContainerState extends State<SummaryContainer> {
+  int counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,59 +29,58 @@ class _SummaryContainerState extends State<SummaryContainer> {
       decoration: BoxDecoration(
         //color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(15),
+        //border: Border.all(color: Colors.white),
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 20),
-          Row(
+          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Spacer(),
-              Column(
-                children: [
-                  Text(
-                    'D${widget.dice.currentDiceSize}',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  Text(
-                    'Dice',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ],
+              Text(
+                "Total rolls",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w200,
+                ),
               ),
-              Spacer(),
-              Container(width: 1, height: 40, color: Colors.white),
-              Spacer(),
-              Column(
-                children: [
-                  Text(
-                    'x${widget.dice.multiplier}',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  Text(
-                    'Multiplier',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ],
+              Text(
+                "${widget.dice.diceRolls.isNotEmpty ? widget.dice.diceRolls.length : "-"}",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              Spacer(),
-              Container(width: 1, height: 40, color: Colors.white),
-              Spacer(),
-              Column(
-                children: [
-                  Text(
-                    '${widget.dice.bonusDice}',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  Text(
-                    'Modifier',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ],
-              ),
-              Spacer(),
             ],
           ),
-          SizedBox(height: 20),
+          Spacer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "Last roll",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              Text(
+                '${widget.dice.totalRollsList.isNotEmpty ? widget.dice.totalRollsList.last : "-"}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
         ],
       ),
     );

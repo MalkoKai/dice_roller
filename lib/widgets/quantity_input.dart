@@ -24,15 +24,16 @@ class _QuantityInputState extends State<QuantityInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //width: 150,
+      width: MediaQuery.of(context).size.width * 0.35,
       height: 60,
       //padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.black),
+        //border: Border.all(color: Colors.black),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10),
           InkWell(
@@ -62,17 +63,17 @@ class _QuantityInputState extends State<QuantityInput> {
                 widget.onChanged();
               });
             },
-            child: Icon(Icons.remove_rounded, size: 35, color: Colors.black),
+            child: Icon(Icons.remove, size: 35, color: Colors.black),
           ),
           SizedBox(
-            width: 100,
+            width: MediaQuery.of(context).size.width * 0.12,
             child: Center(
               child: Text(
                 widget.type == 'bonus'
                     ? widget.dice.bonusDice.toString()
                     : 'x${widget.dice.multiplier.toString()}',
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
@@ -107,7 +108,7 @@ class _QuantityInputState extends State<QuantityInput> {
                 widget.onChanged();
               });
             },
-            child: Icon(Icons.add_rounded, size: 35, color: Colors.black),
+            child: Icon(Icons.add, size: 35, color: Colors.black),
           ),
           SizedBox(width: 10),
         ],

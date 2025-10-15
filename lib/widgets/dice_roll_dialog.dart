@@ -1,5 +1,4 @@
 import 'package:dice_roller/models/dice.dart';
-import 'package:dice_roller/widgets/dice_roller.dart';
 import 'package:flutter/material.dart';
 
 class DiceRollDialog extends StatefulWidget {
@@ -27,30 +26,67 @@ class _DiceRollDialogState extends State<DiceRollDialog> {
       backgroundColor: Colors.black,
       content: Column(
         mainAxisSize: MainAxisSize.min,
+
         children: [
-          DiceRoller(dice: _dice),
+          //DiceRoller(dice: _dice),
+          Text(
+            "Total",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
+          Text(
+            _dice.getTotalRoll().toString(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${_dice.multiplier}d${_dice.currentDiceSize} + ${_dice.bonusDice} =',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w100,
+          Text(
+            "Expression",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.contain,
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  _dice.getRollExpression(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(width: 20),
-              Text(
-                _dice.getTotalRoll().toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                Text(
+                  '(${_dice.bonusDice})',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            "Values",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w200,
+            ),
           ),
           Text(
             '[ ${_dice.currentDiceNums.join(', ')} ]',

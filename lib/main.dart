@@ -10,7 +10,7 @@ void main() async {
     configuration:
         AdaptyConfiguration(apiKey: 'public_live_JMJ7LnV7.k4xOEIDk7ogzSWEdnt5w')
           ..withActivateUI(true)
-          ..withIpAddressCollectionDisabled(true),
+          ..withGoogleAdvertisingIdCollectionDisabled(true),
   );
 
   runApp(const App());

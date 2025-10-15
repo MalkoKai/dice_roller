@@ -39,7 +39,7 @@ class GradientContainer extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: ShowCaseWidget.of(showcaseContext).dismiss,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF444444),
+                      backgroundColor: Colors.blueAccent.shade700,
                     ),
                     child: const Text(
                       'Skip',
@@ -76,6 +76,7 @@ class GradientContainer extends StatelessWidget {
             TooltipActionButton(
               type: TooltipDefaultActionType.previous,
               textStyle: const TextStyle(color: Colors.white),
+              backgroundColor: Colors.blueAccent.shade700,
               hideActionWidgetForShowcase: [_firstShowcaseWidget],
             ),
             // Here we don't need next action for the last showcase widget so we
@@ -83,6 +84,7 @@ class GradientContainer extends StatelessWidget {
             TooltipActionButton(
               type: TooltipDefaultActionType.next,
               textStyle: const TextStyle(color: Colors.white),
+              backgroundColor: Colors.blueAccent.shade700,
               hideActionWidgetForShowcase: [_lastShowcaseWidget],
             ),
           ],

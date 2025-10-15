@@ -92,7 +92,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       maxHeight: MediaQuery.of(context).size.height * 0.8,
       parallaxEnabled: true,
       backdropEnabled: true,
-      minHeight: MediaQuery.of(context).size.height * 0.15,
+      minHeight: MediaQuery.of(context).size.height * 0.12,
       onPanelOpened: () {
         _detector?.stopListening();
       },
@@ -131,7 +131,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                   showAboutDialog(
                     context: context,
                     applicationName: 'Dice Roller',
-                    applicationVersion: '1.0.6',
+                    applicationVersion: '1.1.0',
                     applicationLegalese:
                         'Developed with love, passion and Italian hands by MalkoKai\n\n'
                         'Contact me at malkokaidev@gmail.com for feedbacks, suggestions or just to say hi!',
@@ -145,8 +145,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
           Spacer(),
           Showcase(
             key: _firstShowcaseWidget,
-            description:
-                'Here there is a summary of your current dice settings, with:\n - Dice size (D2, D4, ...)\n - Multiplier (how many dice to roll)\n - Modifier (a value to add or subtract to the final result).',
+            description: 'Here there is an overview of the dice roll.',
             onBarrierClick: () {
               ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
@@ -162,6 +161,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               TooltipActionButton(
                 type: TooltipDefaultActionType.next,
                 textStyle: const TextStyle(color: Colors.white),
+                backgroundColor: Colors.blueAccent.shade700,
               ),
             ],
             child: SummaryContainer(
@@ -175,7 +175,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
           Showcase(
             key: _two,
             description:
-                'In order, here you can set the Dice size (swipe to see all the dice icons), the Multiplier, the Modifier or reset all values to default. Hold the + and - buttons to set the maximum and minimum values. Roll the dice by shaking your device or by tapping the "Roll" button.',
+                'In order, here you can choose the dices to roll and set the Modifier. Tap the "Delete" button to remove all the selected dices or tap the "Reset" one to set the modifier to 0. Roll the dice by shaking your device or by tapping the "Roll" button.',
             onBarrierClick: () {
               ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
@@ -197,7 +197,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               startShakeDetection: _startDetector,
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.15),
         ],
       ),
       panel: Showcase(
@@ -221,7 +221,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
             //SizedBox(height: 5),
             Icon(Icons.horizontal_rule, size: 40),
             Text(
-              'Dice Rolls',
+              'History',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -229,18 +229,10 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                 fontFamily: 'Roboto',
               ),
             ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Total Rolls: ${_dice.diceRolls.length}    |    '),
-                Text(
-                  'Last Roll: ${_dice.diceRolls.isNotEmpty ? _dice.diceRolls.entries.last.value[1].reduce((a, b) => a + b) + _dice.diceRolls.entries.last.value[0][2] : 'N/A'}',
-                ),
-              ],
-            ),
+            SizedBox(height: 40),
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: _dice.diceRolls.length,
                 itemBuilder: (context, index) {
                   final entry = _dice.diceRolls.entries.elementAt(index);
@@ -249,9 +241,7 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          title: Text(
-                            'N.${entry.key}: ${entry.value[0][0]}d${entry.value[0][1]} + ${entry.value[0][2]} = ${(entry.value[1].reduce((a, b) => a + b) + entry.value[0][2])}',
-                          ),
+                          title: Text(_dice.getCurrentRollExpression(entry)),
                           subtitle: Text(
                             'Values: ${entry.value[1].join(', ')}',
                           ),
