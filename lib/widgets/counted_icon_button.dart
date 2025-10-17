@@ -107,7 +107,31 @@ class _CountedIconButtonState extends State<CountedIconButton> {
                 );
               }
             },
-            child: Image.asset(widget.icon, width: 40, height: 40),
+            onLongPress: () {
+              if (_dice.diceCount[_index] > 0) {
+                setState(() {
+                  _dice.decrementDiceCount(_index);
+                  widget.onDiceChanged();
+                });
+                HapticFeedback.mediumImpact();
+              } else {
+                final snackBar = SnackBar(
+                  content: Text(
+                    'You have no more dice of this type to remove.',
+                  ),
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  snackBar,
+                  snackBarAnimationStyle: AnimationStyle(),
+                );
+              }
+            },
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Image.asset(widget.icon, width: 40, height: 40),
+            ),
           ),
         ),
         if (_dice.diceCount[_index] > 0)

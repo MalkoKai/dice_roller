@@ -1,9 +1,11 @@
 import 'package:dice_roller/models/dice.dart';
+import 'package:dice_roller/pages/paywall_adapty.dart';
 import 'package:dice_roller/widgets/counted_icon_button.dart';
 import 'package:dice_roller/widgets/dice_roll_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SetValuesContainer extends StatefulWidget {
   const SetValuesContainer({
@@ -26,11 +28,35 @@ class SetValuesContainer extends StatefulWidget {
 class _SetValuesContainerState extends State<SetValuesContainer> {
   late final Dice _dice;
   var temp = 2.0;
+  bool _shakeToRollEnabled = false;
 
   @override
   void initState() {
     super.initState();
     _dice = widget.dice;
+    _loadShakePreference();
+  }
+
+  Future<void> _loadShakePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _shakeToRollEnabled = prefs.getBool('shake_to_roll_enabled') ?? false;
+    });
+  }
+
+  Future<void> _saveShakePreference(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('shake_to_roll_enabled', value);
+    setState(() {
+      _shakeToRollEnabled = value;
+    });
+
+    // Avvia o ferma il detector in base al valore
+    if (value) {
+      widget.startShakeDetection();
+    } else {
+      widget.stopShakeDetection();
+    }
   }
 
   void customDice() {
@@ -112,25 +138,8 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                     ),
                     Container(
                       height: 2,
-                      width: MediaQuery.of(context).size.width * 0.26,
+                      width: MediaQuery.of(context).size.width * 0.38,
                       color: Colors.black,
-                    ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.black, width: 3),
-                      ),
-                      child: Text(
-                        " ${widget.dice.getTotalDiceCount()} ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -248,9 +257,9 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                   minValue: -100,
                   maxValue: 100,
                   step: 1,
-                  itemCount: 7,
+                  itemCount: 5,
                   //itemHeight: 50,
-                  itemWidth: MediaQuery.of(context).size.width * 0.11,
+                  itemWidth: MediaQuery.of(context).size.width * 0.13,
                   axis: Axis.horizontal,
                   selectedTextStyle: TextStyle(
                     fontSize: 20.0,
@@ -288,6 +297,7 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                       onPressed: () {
                         setState(() {
                           _dice.resetDiceCount();
+                          _dice.setBonusDice(0);
                           widget.onDiceChanged();
                         });
                       },
@@ -320,8 +330,13 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                               builder: (context) => DiceRollDialog(dice: _dice),
                             );
 
-                            // Restart shake detection after dialog is closed
-                            widget.startShakeDetection();
+                            // Restart shake detection only if enabled
+                            final prefs = await SharedPreferences.getInstance();
+                            final enabled =
+                                prefs.getBool('shake_to_roll_enabled') ?? false;
+                            if (enabled) {
+                              widget.startShakeDetection();
+                            }
                           } else {
                             const snackBar = SnackBar(
                               content: Text(
@@ -380,13 +395,62 @@ class _SetValuesContainerState extends State<SetValuesContainer> {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          _dice.reset();
+                          showAboutDialog(
+                            context: context,
+                            applicationName: 'Dice Roller',
+                            applicationVersion: '1.1.2',
+                            applicationLegalese:
+                                'Developed with love, passion and Italian hands by MalkoKai\n\n'
+                                'Contact me at malkokaidev@gmail.com for feedbacks, suggestions or just to say hi!',
+                            children: [
+                              SizedBox(height: 20),
+                              PaywallAdapty(),
+                              SizedBox(height: 20),
+                              StatefulBuilder(
+                                builder: (context, setDialogState) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: SwitchListTile(
+                                      value: _shakeToRollEnabled,
+                                      onChanged: (value) async {
+                                        await _saveShakePreference(value);
+                                        setDialogState(
+                                          () {},
+                                        ); // Aggiorna il dialog
+                                      },
+                                      title: Text(
+                                        'Shake to Roll',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        'Enable rolling dice by shaking your device',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                      activeColor: Colors.green,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
                           widget.onDiceChanged();
                         });
                       },
-
                       icon: Icon(
-                        Icons.restart_alt,
+                        Icons.settings_rounded,
                         size: 40,
                         color: Colors.black,
                       ),

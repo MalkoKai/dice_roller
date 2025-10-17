@@ -97,6 +97,12 @@ class Dice {
     _diceCount[pos]++;
   }
 
+  void decrementDiceCount(int pos) {
+    if (_diceCount[pos] > 0) {
+      _diceCount[pos]--;
+    }
+  }
+
   void resetDiceCount() {
     for (int i = 0; i < _diceCount.length; ++i) {
       diceCount[i] = 0;
@@ -150,7 +156,7 @@ class Dice {
   }
 
   String getCurrentRollExpression(MapEntry<String, List<List<int>>> entry) {
-    String curr = 'N.${entry.key}: ';
+    String curr = '';
     for (int i = 0; i < entry.value[0].length - 1; ++i) {
       if (entry.value[0][i] != 0) {
         curr += '${entry.value[0][i]}d${_diceSizes[i]} + ';
@@ -159,6 +165,57 @@ class Dice {
     curr +=
         '${entry.value[0][8]} = ${(entry.value[1].reduce((a, b) => a + b) + entry.value[0][8])}';
     return curr;
+  }
+
+  /// Returns only the dice expression part (e.g., "2d6 + 1d20")
+  String getDiceExpressionOnly(MapEntry<String, List<List<int>>> entry) {
+    List<String> parts = [];
+
+    for (int i = 0; i < entry.value[0].length - 1; i++) {
+      if (entry.value[0][i] > 0) {
+        parts.add('${entry.value[0][i]}d${_diceSizes[i]}');
+      }
+    }
+
+    if (parts.isEmpty) {
+      return entry.value[0][8] != 0 ? '${entry.value[0][8]}' : 'No dice';
+    }
+
+    return parts.join(' + ');
+  }
+
+  /// Returns the total for a specific roll entry
+  int getRollTotal(MapEntry<String, List<List<int>>> entry) {
+    final values = entry.value[1];
+    final bonusDice = entry.value[0][8];
+
+    if (values.isEmpty) {
+      return bonusDice;
+    }
+
+    return values.reduce((a, b) => a + b) + bonusDice;
+  }
+
+  /// Returns the bonus/modifier for a specific roll entry
+  int getRollBonus(MapEntry<String, List<List<int>>> entry) {
+    return entry.value[0][8];
+  }
+
+  /// Returns the current dice expression (e.g., "2d6 + 1d20")
+  String getCurrentDiceExpression() {
+    List<String> parts = [];
+
+    for (int i = 0; i < _diceCount.length; i++) {
+      if (_diceCount[i] > 0) {
+        parts.add('${_diceCount[i]}d${_diceSizes[i]}');
+      }
+    }
+
+    if (parts.isEmpty) {
+      return _bonusDice != 0 ? '$_bonusDice' : 'No dice';
+    }
+
+    return parts.join(' + ');
   }
 
   void plusMultiplier() {

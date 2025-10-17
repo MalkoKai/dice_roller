@@ -8,8 +8,8 @@ class PaywallAdapty extends StatefulWidget {
   State<PaywallAdapty> createState() => _PaywallAdaptyState();
 }
 
-class _PaywallAdaptyState extends State<PaywallAdapty> implements AdaptyUIPaywallsEventsObserver {
-  
+class _PaywallAdaptyState extends State<PaywallAdapty>
+    implements AdaptyUIPaywallsEventsObserver {
   @override
   void initState() {
     super.initState();
@@ -20,7 +20,6 @@ class _PaywallAdaptyState extends State<PaywallAdapty> implements AdaptyUIPaywal
 
   Future<void> _showPaywallIfNeeded() async {
     try {
-
       final paywall = await Adapty().getPaywall(
         placementId: 'donation_buy_me_a_coffee',
       );
@@ -37,7 +36,10 @@ class _PaywallAdaptyState extends State<PaywallAdapty> implements AdaptyUIPaywal
 
   // This method is called when user performs an action on the paywall UI
   @override
-  void paywallViewDidPerformAction(AdaptyUIPaywallView view, AdaptyUIAction action) {
+  void paywallViewDidPerformAction(
+    AdaptyUIPaywallView view,
+    AdaptyUIAction action,
+  ) {
     switch (action) {
       case const CloseAction():
       case const AndroidSystemBackAction():
@@ -62,57 +64,81 @@ class _PaywallAdaptyState extends State<PaywallAdapty> implements AdaptyUIPaywal
   void paywallViewDidAppear(AdaptyUIPaywallView view) {
     // TODO: implement paywallViewDidAppear
   }
-  
+
   @override
   void paywallViewDidDisappear(AdaptyUIPaywallView view) {
     // TODO: implement paywallViewDidDisappear
   }
-  
+
   @override
-  void paywallViewDidFailLoadingProducts(AdaptyUIPaywallView view, AdaptyError error) {
+  void paywallViewDidFailLoadingProducts(
+    AdaptyUIPaywallView view,
+    AdaptyError error,
+  ) {
     // TODO: implement paywallViewDidFailLoadingProducts
   }
-  
+
   @override
-  void paywallViewDidFailPurchase(AdaptyUIPaywallView view, AdaptyPaywallProduct product, AdaptyError error) {
+  void paywallViewDidFailPurchase(
+    AdaptyUIPaywallView view,
+    AdaptyPaywallProduct product,
+    AdaptyError error,
+  ) {
     // TODO: implement paywallViewDidFailPurchase
   }
-  
+
   @override
-  void paywallViewDidFailRendering(AdaptyUIPaywallView view, AdaptyError error) {
+  void paywallViewDidFailRendering(
+    AdaptyUIPaywallView view,
+    AdaptyError error,
+  ) {
     // TODO: implement paywallViewDidFailRendering
   }
-  
+
   @override
   void paywallViewDidFailRestore(AdaptyUIPaywallView view, AdaptyError error) {
     // TODO: implement paywallViewDidFailRestore
   }
-  
+
   @override
-  void paywallViewDidFinishPurchase(AdaptyUIPaywallView view, AdaptyPaywallProduct product, AdaptyPurchaseResult purchaseResult) {
+  void paywallViewDidFinishPurchase(
+    AdaptyUIPaywallView view,
+    AdaptyPaywallProduct product,
+    AdaptyPurchaseResult purchaseResult,
+  ) {
     // TODO: implement paywallViewDidFinishPurchase
   }
-  
+
   @override
-  void paywallViewDidFinishRestore(AdaptyUIPaywallView view, AdaptyProfile profile) {
+  void paywallViewDidFinishRestore(
+    AdaptyUIPaywallView view,
+    AdaptyProfile profile,
+  ) {
     // TODO: implement paywallViewDidFinishRestore
   }
-  
+
   @override
-  void paywallViewDidFinishWebPaymentNavigation(AdaptyUIPaywallView view, AdaptyPaywallProduct? product, AdaptyError? error) {
+  void paywallViewDidFinishWebPaymentNavigation(
+    AdaptyUIPaywallView view,
+    AdaptyPaywallProduct? product,
+    AdaptyError? error,
+  ) {
     // TODO: implement paywallViewDidFinishWebPaymentNavigation
   }
-  
+
   @override
   void paywallViewDidSelectProduct(AdaptyUIPaywallView view, String productId) {
     // TODO: implement paywallViewDidSelectProduct
   }
-  
+
   @override
-  void paywallViewDidStartPurchase(AdaptyUIPaywallView view, AdaptyPaywallProduct product) {
+  void paywallViewDidStartPurchase(
+    AdaptyUIPaywallView view,
+    AdaptyPaywallProduct product,
+  ) {
     // TODO: implement paywallViewDidStartPurchase
   }
-  
+
   @override
   void paywallViewDidStartRestore(AdaptyUIPaywallView view) {
     // TODO: implement paywallViewDidStartRestore
@@ -132,10 +158,12 @@ class _PaywallAdaptyState extends State<PaywallAdapty> implements AdaptyUIPaywal
         ),
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          child: const Text('BUY ME A COFFEE', style: TextStyle(color: Colors.black)),
+          child: const Text(
+            'BUY ME A COFFEE',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       ),
     );
   }
-  
 }

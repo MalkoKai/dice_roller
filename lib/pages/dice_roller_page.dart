@@ -7,7 +7,7 @@ import 'package:shake/shake.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dice_roller/models/dice.dart';
-import 'package:dice_roller/pages/paywall_adapty.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Global key for the first showcase widget
 final GlobalKey _firstShowcaseWidget = GlobalKey();
@@ -28,7 +28,6 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
   Dice _dice = Dice();
 
   ShakeDetector? _detector;
-  String _lastShakeInfo = 'No shake detected yet';
   final double _shakeThreshold = 2;
   final bool _useFilter = false;
   final int _minimumShakeCount = 1;
@@ -39,8 +38,15 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
   void initState() {
     super.initState();
     _dice = Dice();
+    _loadShakePreference();
+  }
 
-    _startDetector();
+  Future<void> _loadShakePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    final enabled = prefs.getBool('shake_to_roll_enabled') ?? false;
+    if (enabled) {
+      _startDetector();
+    }
   }
 
   @override
@@ -49,23 +55,33 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
     super.dispose();
   }
 
-  void _startDetector() {
+  void _startDetector() async {
+    // Check preference before starting
+    final prefs = await SharedPreferences.getInstance();
+    final enabled = prefs.getBool('shake_to_roll_enabled') ?? false;
+
+    if (!enabled) {
+      // Don't start detector if disabled
+      _detector?.stopListening();
+      return;
+    }
+
     // Stop previous detector if exists
     _detector?.stopListening();
     _detector = ShakeDetector.autoStart(
       onPhoneShake: (ShakeEvent event) async {
+        // Controlla se ci sono dadi selezionati
+        if (_dice.getTypeDicesSelected() == 0) {
+          // Nessun dado selezionato, non rollare
+          return;
+        }
+
         setState(() {
           // Stop detecting shakes
           _detector?.stopListening();
 
           _dice.rollDice();
           HapticFeedback.heavyImpact();
-
-          _lastShakeInfo =
-              'Shake detected:\n'
-              'Direction: ${event.direction}\n'
-              'Force: ${event.force.toStringAsFixed(2)}\n'
-              'Time: ${event.timestamp.toString()}';
         });
         await showDialog(
           context: context,
@@ -96,8 +112,13 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       onPanelOpened: () {
         _detector?.stopListening();
       },
-      onPanelClosed: () {
-        _startDetector();
+      onPanelClosed: () async {
+        // Controlla la preferenza prima di riavviare
+        final prefs = await SharedPreferences.getInstance();
+        final enabled = prefs.getBool('shake_to_roll_enabled') ?? false;
+        if (enabled) {
+          _startDetector();
+        }
       },
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(18),
@@ -124,25 +145,9 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
                 },
               ),
               Spacer(),
-              IconButton(
-                icon: Icon(Icons.info_outline, color: Colors.white),
-                tooltip: 'Info',
-                onPressed: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationName: 'Dice Roller',
-                    applicationVersion: '1.1.0',
-                    applicationLegalese:
-                        'Developed with love, passion and Italian hands by MalkoKai\n\n'
-                        'Contact me at malkokaidev@gmail.com for feedbacks, suggestions or just to say hi!',
-                    children: [SizedBox(height: 20), PaywallAdapty()],
-                  );
-                },
-              ),
-              SizedBox(width: 30),
             ],
           ),
-          Spacer(),
+          SizedBox(height: 10),
           Showcase(
             key: _firstShowcaseWidget,
             description: 'Here there is an overview of the dice roll.',
@@ -171,11 +176,11 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
               },
             ),
           ),
-          Spacer(),
+          SizedBox(height: 10),
           Showcase(
             key: _two,
             description:
-                'In order, here you can choose the dices to roll and set the Modifier. Tap the "Delete" button to remove all the selected dices or tap the "Reset" one to set the modifier to 0. Roll the dice by shaking your device or by tapping the "Roll" button.',
+                'In order, here you can choose the dices to roll by tapping on it or removing it with a long press. Then you can set the Modifier. Tap the "Delete" button to reset the selected dices and the Modifier. Roll the dice by shaking your device or by tapping the "Roll" button.',
             onBarrierClick: () {
               ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
@@ -232,21 +237,178 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
             SizedBox(height: 40),
             Expanded(
               child: ListView.builder(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 itemCount: _dice.diceRolls.length,
                 itemBuilder: (context, index) {
                   final entry = _dice.diceRolls.entries.elementAt(index);
-                  return Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(_dice.getCurrentRollExpression(entry)),
-                          subtitle: Text(
-                            'Values: ${entry.value[1].join(', ')}',
-                          ),
+                  final rollNumber = entry.key;
+                  final values = entry.value[1];
+                  final bonusDice = _dice.getRollBonus(entry);
+                  final total = _dice.getRollTotal(entry);
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade300, width: 1),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.8),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
                       ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header with roll number and total
+                          Row(
+                            children: [
+                              // Roll number badge
+                              Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: Colors.blueAccent.shade700,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '#$rollNumber',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              // Dice expression
+                              Expanded(
+                                child: Text(
+                                  _dice.getDiceExpressionOnly(entry),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              // Total result
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade50,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.green.shade200,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.functions,
+                                      size: 16,
+                                      color: Colors.green.shade700,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '$total',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green.shade700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Divider
+                          Container(height: 1, color: Colors.grey.shade200),
+                          const SizedBox(height: 12),
+                          // Individual values
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.casino_outlined,
+                                size: 16,
+                                color: Colors.grey.shade600,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children:
+                                      values.map((value) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.blue.shade100,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '$value',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.blue.shade700,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Bonus modifier if present
+                          if (bonusDice != 0) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.add_circle_outline,
+                                  size: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Modifier: ${bonusDice > 0 ? '+' : ''}$bonusDice',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade700,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                   );
                 },
