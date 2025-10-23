@@ -22,6 +22,7 @@ class GradientContainer extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
             colors: colors,
             begin: Alignment.topLeft,

@@ -21,6 +21,11 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    // Force Portrait Mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp, // Normal Portrait
+      DeviceOrientation.portraitDown, // Upside-Down Portrait
+    ]);
     return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }

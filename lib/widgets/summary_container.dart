@@ -175,7 +175,7 @@ class _SummaryContainerState extends State<SummaryContainer> {
             value,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               height: 1,
             ),
@@ -205,15 +205,15 @@ class _SummaryContainerState extends State<SummaryContainer> {
             value,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
-              fontSize: 9,
+              color: Colors.white,
+              fontSize: 8,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -327,7 +327,7 @@ class _SummaryContainerState extends State<SummaryContainer> {
                       "$totalDice",
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 11,
+                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -491,7 +491,7 @@ class _SummaryContainerState extends State<SummaryContainer> {
               label,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.5),
-                fontSize: 9,
+                fontSize: 8,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -499,7 +499,7 @@ class _SummaryContainerState extends State<SummaryContainer> {
               "$value",
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -513,7 +513,7 @@ class _SummaryContainerState extends State<SummaryContainer> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
-      height: MediaQuery.of(context).size.height * 0.18,
+      height: MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         //border: Border.all(color: Colors.white),

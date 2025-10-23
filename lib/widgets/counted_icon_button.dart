@@ -85,8 +85,9 @@ class _CountedIconButtonState extends State<CountedIconButton> {
       clipBehavior: Clip.none,
       children: [
         //IconButton(icon: ImageIcon(AssetImage(icon)), onPressed: onPressed),
-        Center(
+        Positioned.fill(
           child: InkWell(
+            borderRadius: BorderRadius.circular(15),
             onTap: () {
               if (_dice.diceCount[_index] < maxPerType) {
                 setState(() {
@@ -127,10 +128,11 @@ class _CountedIconButtonState extends State<CountedIconButton> {
                 );
               }
             },
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset(widget.icon, width: 40, height: 40),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Image.asset(widget.icon, fit: BoxFit.contain),
+              ),
             ),
           ),
         ),
@@ -139,11 +141,11 @@ class _CountedIconButtonState extends State<CountedIconButton> {
             right: 0,
             top: 0,
             child: CircleAvatar(
-              radius: 10,
+              radius: 12,
               backgroundColor: Colors.blueAccent.shade700,
               child: Text(
                 _dice.diceCount[_index].toString(),
-                style: const TextStyle(fontSize: 12, color: Colors.white),
+                style: const TextStyle(fontSize: 13, color: Colors.white),
               ),
             ),
           ),

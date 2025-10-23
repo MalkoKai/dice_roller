@@ -33,6 +33,10 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
   final int _minimumShakeCount = 1;
 
   final GlobalKey _two = GlobalKey();
+  final GlobalKey _three = GlobalKey();
+  final GlobalKey _four = GlobalKey();
+  final GlobalKey _five = GlobalKey();
+  final GlobalKey _six = GlobalKey();
 
   @override
   void initState() {
@@ -127,30 +131,10 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
       body: Column(
         children: [
           Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: 30),
-              IconButton(
-                icon: Icon(Icons.help_outline, color: Colors.white),
-                tooltip: 'Guided Tour',
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => ShowCaseWidget.of(context).startShowCase([
-                      _firstShowcaseWidget,
-                      _two,
-                      _lastShowcaseWidget,
-                    ]),
-                  );
-                },
-              ),
-              Spacer(),
-            ],
-          ),
-          SizedBox(height: 10),
           Showcase(
             key: _firstShowcaseWidget,
-            description: 'Here there is an overview of the dice roll.',
+            description:
+                'Here there is an overview of the dice roll.\nIn the first section, you can see the current setup.\nSwipe right to see some statistics.',
             onBarrierClick: () {
               ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
                 _firstShowcaseWidget,
@@ -177,30 +161,27 @@ class _DiceRollerPageState extends State<DiceRollerPage> {
             ),
           ),
           SizedBox(height: 10),
-          Showcase(
-            key: _two,
-            description:
-                'In order, here you can choose the dices to roll by tapping on it or removing it with a long press. Then you can set the Modifier. Tap the "Delete" button to reset the selected dices and the Modifier. Roll the dice by shaking your device or by tapping the "Roll" button.',
-            onBarrierClick: () {
-              ShowCaseWidget.of(context).hideFloatingActionWidgetForKeys([
-                _firstShowcaseWidget,
-                _lastShowcaseWidget,
-              ]);
+          SetValuesContainer(
+            dice: _dice,
+            onDiceChanged: () {
+              setState(() {});
             },
-            tooltipActionConfig: const TooltipActionConfig(
-              alignment: MainAxisAlignment.start,
-              position: TooltipActionPosition.outside,
-              gapBetweenContentAndAction: 10,
-            ),
-            tooltipPosition: TooltipPosition.top,
-            child: SetValuesContainer(
-              dice: _dice,
-              onDiceChanged: () {
-                setState(() {});
-              },
-              stopShakeDetection: () => _detector?.stopListening(),
-              startShakeDetection: _startDetector,
-            ),
+            stopShakeDetection: () => _detector?.stopListening(),
+            startShakeDetection: _startDetector,
+            onStartGuidedTour: () {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => ShowCaseWidget.of(context).startShowCase([
+                  _firstShowcaseWidget,
+                  _two,
+                  _three,
+                  _four,
+                  _five,
+                  _six,
+                  _lastShowcaseWidget,
+                ]),
+              );
+            },
+            showcaseKeys: [_two, _three, _four, _five, _six],
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.15),
         ],
